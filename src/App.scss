@@ -1,0 +1,106 @@
+*{margin: 0; padding: 0; box-sizing: border-box;}
+ul{list-style: none;}
+a{text-decoration: none;}
+.header{
+  width: 100%;
+  padding: 0 30px;
+  border-bottom: 1px solid #ddd;
+  .header-inner{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    align-items: center;
+    .logo{
+      a{
+        img{width: 120px}
+      }
+    }
+    .nav{
+      display: block;
+      >ul{
+        display: flex;
+        >li{
+          >a{}
+        }
+      }
+      .loginAndsignup{
+        position: absolute;
+        top: 10px;
+        right: 0;
+        li{
+          a{
+            font-size: 12px;
+            color: #868686;
+            &:hover{
+              color: #000;
+            }
+          }
+          &:first-child a{
+            margin-right: 10px;
+          }
+        }
+      }
+      .menu{
+        margin-top: 12px;
+        li{
+          a{
+            color: #333;
+            font-size: 15px;
+          }
+          &:first-child a{
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+    .movieNav{
+      display: none;
+    }
+    @media screen and (max-width: 720px){
+        .nav{display: none;}
+        .movieNav{display: block;
+          .mobile-header-drop{
+            position: absolute;
+            top:0;
+            left:-30px;
+            width: 80%;
+            height: 100vh;
+            background: rgba(0,0,0,.9);
+            padding: 20px;
+            display: none;
+
+            .mobile-header-nav{
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 90vh;
+              
+              .mobile-header-menu{
+                ul{
+                  li{
+                    padding: 20px 0;
+                    border-bottom: 1px solid #ccc;
+                    a{
+                      color: rgba(255,255,255,.7)
+                    }
+                  }
+                }
+              }
+              .mobile-header-loginJoin{
+                ul{
+                  li{
+                    a{
+                      color: #ccc;
+                      font-size: 12px;
+                    }
+                  }
+                }
+              }
+            }
+            
+          }
+        }
+    }
+  }
+}
