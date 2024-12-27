@@ -17,7 +17,7 @@ import data from '../data/data'
 const MainSlider = () => {
 	const [swiperIndex, setSwiperIndex] = useState(0);//페이지네이션
 	const [swiper, setSwiper] = useState(null);//슬라이드용
-	const [textSwiperIndex, setTextSwiperIndex] = useState(0);//텍스트 슬라이드용
+	/* const [textSwiperIndex, setTextSwiperIndex] = useState(0);//텍스트 슬라이드용 */
 	const [textSwiper, setTextSwiper] = useState(null);//텍스트 슬라이드용 swiper
 	const [bgColor, setBgColor] = useState(); //배경색 
 	const  swiperRef= useRef(null);
