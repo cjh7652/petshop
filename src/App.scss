@@ -261,7 +261,22 @@ a{text-decoration: none;}
   }
 }
 
-
+.footer{
+  
+  padding: 30px 0;
+  background: #333;
+  color: #bbb;
+  .container{
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    .foot-addr{
+      .footLogo{}
+      address{}
+      .copy{}
+    }
+  }
+}
 
 @media screen and (max-width:1200px) {
   .mainslider{

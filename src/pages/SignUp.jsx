@@ -1,4 +1,4 @@
-import React, {useState, useRef/* , useEffect */} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { IoCheckmark } from "react-icons/io5";
 import './SignUp.scss';
 
@@ -20,6 +20,13 @@ const SignUp = () => {
   const [email, setEmail] = useState('') //이메일
   const [birth, setBirth] = useState('') //생년월일
 
+  const [allChecked, setAllChecked] = useState(false);
+  const [termsChecked, setTermsChecked] = useState(false);
+  const [privacyChecked, setPrivacyChecked] = useState(false);
+  const [marketingChecked, setMarketingChecked] = useState(false);
+
+ /*  const [isSubmitted, setIsSubmitted] = useState(false) */
+
   const idRule=/^[a-z0-9]{4,16}$/;
   const pwRule=/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,16}$/
   const nameRule=/^[a-zA-Z가-힣]{1,20}$/
@@ -37,6 +44,21 @@ const SignUp = () => {
     birth: {text:'', color: ''},
   })
 
+
+  const handleAllCheck = () =>{
+    setAllChecked(!allChecked)
+    setTermsChecked(!termsChecked)
+    setPrivacyChecked(!privacyChecked)
+    setMarketingChecked(!marketingChecked)
+  }
+  useEffect(()=>{
+    if(termsChecked&&privacyChecked&&marketingChecked){
+      setAllChecked(true)
+    }else{
+      setAllChecked(false)
+    }
+
+  }, [termsChecked, privacyChecked, marketingChecked])
 
   const handleMessageChange=(key, text, color) =>{
     setMessages((prevMessages) =>({
@@ -143,8 +165,23 @@ const SignUp = () => {
 			setBirth('');
 		}
 	}
-  const handleSubmit = () =>{
+  const handleSubmit = (event) =>{
+    event.preventDefault()
 
+    if(
+      idRule.test(id) &&
+      pwRule.test(pw) &&
+      pw2 === pw &&
+      nameRule.test(name) &&
+      phoneRule.test(phone) &&
+      emailRule.test(email) &&
+      birthRule.test(birth) &&
+      termsChecked &&
+      privacyChecked &&
+      marketingChecked 
+    ){
+      console.log('회원가입을 축하합니다.')
+    }else{ console.log('에러')}
   }
   return (
     <div className='signWrap'>
@@ -235,7 +272,7 @@ const SignUp = () => {
               </div>
               <p>
                 <span>이용약관에 동의하십니까?</span>
-                <input type="checkbox" id="terms-check1" className='check-style' />
+                <input type="checkbox" id="terms-check1" className='check-style' checked={termsChecked} onChange={() => setTermsChecked(!termsChecked)}/>
                 <label htmlFor="terms-check1">  동의함</label>
               </p>
 
@@ -272,7 +309,7 @@ const SignUp = () => {
               <p>
                 <span>개인정보 수집 및 이용에 동의하십니까?</span>
                 
-                <input type="checkbox" id="terms-check2" className='check-style' />
+                <input type="checkbox" id="terms-check2" className='check-style'  checked={privacyChecked} onChange={() => setPrivacyChecked(!privacyChecked)}/>
                 <label htmlFor="terms-check2">  동의함</label>
               </p>
 
@@ -304,7 +341,7 @@ const SignUp = () => {
               </div>
               <p>
                 <span>SMS 수신을 동의하십니까?</span>
-                <input type="checkbox" id="terms-check3" className='check-style' />
+                <input type="checkbox" id="terms-check3" className='check-style' checked={marketingChecked} onChange={() => setMarketingChecked(!marketingChecked)} />
                 <label htmlFor="terms-check3">  동의함</label>
               </p>
             </li>
