@@ -6,6 +6,9 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import QuickButton from './componenets/QuickButton';
+import UploadPage from './componenets/UploadPage';
+
 
 
 
@@ -18,8 +21,10 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/uploadpage" element={<UploadPage />} />
         </Routes>
         <Footer />
+        <QuickButton />
     </div>
   );
 }

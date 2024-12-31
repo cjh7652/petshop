@@ -1,6 +1,8 @@
 .signWrap{
-  width: 1000px;
+  width: 100%;
   margin: 150px auto;
+  max-width: 1000px;
+  padding: 0 20px;
   h2{
     border-bottom: 5px double #ddd;
     font-size: 20px;
