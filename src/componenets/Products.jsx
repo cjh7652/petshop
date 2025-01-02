@@ -6,12 +6,12 @@ import './products.scss'
 
 const Products = () => {
   const navigate = useNavigate();
-  axios.get('')
+/*   axios.get('')
   .then((res)=>{
     console.log(res)
   }).catch((error) =>{
     console.log(error)
-  })
+  }) */
   return (
     <div className='products'>
       <h2>Products</h2>

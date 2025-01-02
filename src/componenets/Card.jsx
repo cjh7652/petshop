@@ -2,6 +2,7 @@ import React from "react";
 import { Autoplay } from "swiper/modules";
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import {Link} from 'react-router-dom';
 
 // Import Swiper styles
 import "swiper/css";
@@ -13,7 +14,7 @@ import "swiper/css/autoplay";
 import freshData from '../data/datafresh';
 import "./FreshBox.scss";
 
-const FreshBox = () => {
+const Card = () => {
   return (
 
     <Swiper
@@ -42,16 +43,18 @@ const FreshBox = () => {
     >
       {freshData.map((item, idx) => (
         <SwiperSlide  className="freshWrap">
-          <img src={item.img} alt="" />
-          <div className="txt" key={idx}>
-            <span className="freshNumber">{item.id+1}</span>
-            <strong>{item.title}</strong>
-            <span className="price">{item.price}</span>
-          </div>
+        <Link to ={`/about/${item.id}`}>
+            <img src={item.img} alt="" />
+            <div className="txt" key={idx}>
+              <span className="freshNumber">{item.id+1}</span>
+              <strong>{item.title}</strong>
+              <span className="price">{item.price}</span>
+            </div>
+        </Link>
         </SwiperSlide>
       ))}
     </Swiper>
   );
 };
 
-export default FreshBox;
+export default Card;

@@ -282,6 +282,33 @@ a{text-decoration: none;}
   }
 }
 
+.about{
+  width: 100%;
+  padding: 0 20px;
+  margin-top: 120px;
+  .aboutWrap{
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    background: #eee;
+    padding: 20px;
+    .imgWrap{
+      width: 39%;
+      margin-right: 3%;
+      img{
+        width: 100%
+      }
+    }
+    .cntWrap{
+      width: 58%;
+      .title{margin-bottom: 20px;}
+      .desc{font-size: 14px;margin-bottom: 30px;}
+      .price{}
+    }
+  }
+}
+
 @media screen and (max-width:1200px) {
   .mainslider{
     .cont{
