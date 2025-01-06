@@ -1,23 +1,59 @@
-import React from 'react';
-import { Button,  Form, Input, Upload , Divider, InputNumber } from 'antd';
+import React, {useState} from 'react';
+import { Button,  Form, Input, Upload , Divider, InputNumber, message } from 'antd';
 
 import './uploadPage.scss'
 import TextArea from 'antd/es/input/TextArea';
+import axios from 'axios';
+import { API_URL } from '../config/constants';
+import {useNavigate} from 'react-router-dom'
 
 const UploadPage = () => {
+  const [imageUrl, setImageUrl] = useState(null);
+  const navigate=useNavigate();
+
   const onFinish = (values) => {
-    console.log('Success:', values);
+    axios.post(`${API_URL}/products`, {
+        name:values.name,
+        description: values.description,
+        price: values.price,
+        seller: values.seller,
+        imageurl: imageUrl,
+    }).then((result)=>{
+      navigate("/", {replace: true})
+    }).catch((error)=>{
+      console.log(error);
+      message.error('에러가 발생했습니다.')
+    })
   };
+  const onChangeImage = (info) =>{
+    if(info.file.status === "uploading"){
+      return;
+    }
+    if(info.file.status === "done"){
+      const response=info.file.response;
+      const imageUrl=response.imageUrl;
+      setImageUrl(imageUrl)
+    }
+  }
 
   return (
     <div className='uploadpage'>
       <Form name="basic" onFinish={onFinish}  >
         <Form.Item name="files" valuePropName='image'>
-          <Upload name='image' >
-              <div className="upload-img">
-                <img src={process.env.PUBLIC_URL + '/img/icon/camera.png'} alt="" />
-                <span>이미지를 업로드해주세요</span>
-              </div>
+          <Upload name='image'  action={`${API_URL}/image`} listType='picture' showUploadList={false} onChange={onChangeImage}>
+              {
+                imageUrl ? (
+                  <div>
+                    <img src={`${API_URL}/${imageUrl}`} alt="uploadImg" id="upload-img" />
+                  </div>
+                ) : (
+                  <div className="upload-img">
+                    <img src={process.env.PUBLIC_URL + '/img/icon/camera.png'} alt="" />
+                    <span>이미지를 업로드해주세요</span>
+                </div>
+                )
+              }
+             
 
           </Upload>
         </Form.Item>
