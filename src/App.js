@@ -10,6 +10,7 @@ import QuickButton from './componenets/QuickButton';
 import UploadPage from './componenets/UploadPage';
 import { createContext, useState } from 'react';
 import data from './data/datafresh';
+import ProductPage from './componenets/ProductPage';
 
 
 const DataContext=createContext();
@@ -28,6 +29,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/uploadpage" element={<UploadPage />} />
+            <Route path="/products/:id" element={<ProductPage />} />
           </Routes>
           <Footer />
           <QuickButton />

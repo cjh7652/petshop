@@ -1,10 +1,14 @@
 import React, {useState, useRef, useEffect} from 'react';
 import { IoCheckmark } from "react-icons/io5";
 import './SignUp.scss';
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import {API_URL} from '../config/constants';
 
 
 
 const SignUp = () => {
+  const history = useNavigate();
   const idInputRef= useRef(null)
   const pwInputRef= useRef(null)
   const nameInputRef= useRef(null)
@@ -24,8 +28,8 @@ const SignUp = () => {
   const [termsChecked, setTermsChecked] = useState(false);
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [marketingChecked, setMarketingChecked] = useState(false);
-
- /*  const [isSubmitted, setIsSubmitted] = useState(false) */
+  const [isSubmitted, setIsSubmitted] = useState(false); //회원가입 제출 여부
+  const [isRegistered, setIsRegistered] = useState(false); //회원가입완료
 
   const idRule=/^[a-z0-9]{4,16}$/;
   const pwRule=/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,16}$/
@@ -44,6 +48,15 @@ const SignUp = () => {
     birth: {text:'', color: ''},
   })
 
+  useEffect(()=>{
+    if(isSubmitted){
+      if(isRegistered){
+        alert('회원가입이 완료되었습니다.')
+      }else{
+        alert('회원가입이 실패했습니다.')
+      }
+    }
+  },[isSubmitted, isRegistered])
 
   const handleAllCheck = () =>{
     setAllChecked(!allChecked)
@@ -139,35 +152,34 @@ const SignUp = () => {
 
   //이메일
   const handleEmail = (event) =>{
-		const newEmailValue= event.target.value;
-		setEmail(newEmailValue)
-		if(emailRule.test(newEmailValue)){
-			handleMessageChange('email', '사용 가능한 이메일입니다.', 'success-color');
-		}else if(newEmailValue===""){
-			handleMessageChange('email', '이메일을 입력해주세요', 'error-color');
-			
-		}else{
-			handleMessageChange('email', '이메일을 다시 한번 확인해주세요', 'error-color');
-			setEmail('');
-		}
-	}
+      const newEmailValue= event.target.value;
+      setEmail(newEmailValue)
+      if(emailRule.test(newEmailValue)){
+         handleMessageChange('email', '사용 가능한 이메일입니다.', 'success-color');
+      }else if(newEmailValue===""){
+         handleMessageChange('email', '이메일을 입력해주세요', 'error-color');
+         
+      }else{
+         handleMessageChange('email', '이메일을 다시 한번 확인해주세요', 'error-color');
+         setEmail('');
+      }
+   }
 
   //birthRule
   const handleBirth = (event) =>{
-		const newBirthValue= event.target.value;
-		setBirth(newBirthValue)
-		if(birthRule.test(newBirthValue)){
-			handleMessageChange('birth', '올바른 생년월일입니다', 'success-color');
-		}else if(newBirthValue===""){
-			handleMessageChange('birth', '생년월일을 입력해주세요', 'error-color');
-		}else{
-			handleMessageChange('birth', '생년월일을 다시 한번 확인해주세요', 'error-color');
-			setBirth('');
-		}
-	}
+      const newBirthValue= event.target.value;
+      setBirth(newBirthValue)
+      if(birthRule.test(newBirthValue)){
+         handleMessageChange('birth', '올바른 생년월일입니다', 'success-color');
+      }else if(newBirthValue===""){
+         handleMessageChange('birth', '생년월일을 입력해주세요', 'error-color');
+      }else{
+         handleMessageChange('birth', '생년월일을 다시 한번 확인해주세요', 'error-color');
+         setBirth('');
+      }
+   }
   const handleSubmit = (event) =>{
     event.preventDefault()
-
     if(
       idRule.test(id) &&
       pwRule.test(pw) &&
@@ -180,12 +192,39 @@ const SignUp = () => {
       privacyChecked &&
       marketingChecked 
     ){
-      console.log('회원가입을 축하합니다.')
-    }else{ console.log('에러')}
+      try{
+        axios.post(`${API_URL}/users`,{
+          user_id:id,
+          pw : pw,
+          name:name,
+          phone:phone,
+          email:email,
+          birth:birth,
+          marketingChecked : marketingChecked ? "True" : "False"
+        }).then((result)=>{
+          console.log(result);
+          history("/", {replace:true})
+        }).catch((error)=>{
+          console.error(error)
+        })
+        setIsSubmitted(true);
+        setIsRegistered(true);
+      }catch(error){
+        //db에 회원가입 정보 넣기 실패
+        console.log(error);
+        setIsRegistered(false);
+        setIsSubmitted(true);
+      }
+    }else{
+      console.log('에러')
+      setIsRegistered(false);
+      setIsSubmitted(true);
+    }
   }
   return (
     <div className='signWrap'>
       <h2>회원가입</h2>
+      <p>회원가입 정보입력 단계입니다.</p>
       <form action="#" method='post' name="signup" onSubmit={handleSubmit}>
         <fieldset className='signUpArea'>
           <ul>
@@ -200,13 +239,13 @@ const SignUp = () => {
             <li className="pw-section">
               <div className="area-style">
                 <label htmlFor="pwArea" className='label-style'>비밀번호</label>
-                <input ref={pwInputRef} type="text" id="pwArea" required size={20} value={pw} onChange={(event) => {setPw(event.target.value)}} onBlur={handlePw} />
+                <input ref={pwInputRef} type="password" id="pwArea" required size={20} value={pw} onChange={(event) => {setPw(event.target.value)}} onBlur={handlePw} />
                 <span className={`mes-style ${messages.pw.color}`}>{messages.pw.text}</span>
                 <p className="help-style"><IoCheckmark />영문대소문/숫자/특수문자조합, 8-16자</p>
                 <br />
 
                 <label htmlFor="pw2Area" className='label-style'>비밀번호확인</label>
-                <input type="text" id="pw2Area" required size={20} value={pw2} onChange={(event) => {setPw2(event.target.value)}} onBlur={handlePw2} />
+                <input type="password" id="pw2Area" required size={20} value={pw2} onChange={(event) => {setPw2(event.target.value)}} onBlur={handlePw2} />
                 <span className={`mes-style ${messages.pw2.color}`}>{messages.pw2.text}</span>
               </div>
             </li>
@@ -225,20 +264,20 @@ const SignUp = () => {
               </div>
             </li>
             <li className="email-section">
-							<div className="area-style">
-								<label htmlFor="emailArea" className='label-style'>이메일</label>
-								<input ref={emailInputRef} type="text" id="emailArea" required size={20} value={email} onChange={(event) => {setEmail(event.target.value)}} onBlur={handleEmail}/>
-								<span className={`mes-style ${messages.email.color}`}>{messages.email.text}</span>
-							</div>
-						</li>
+                     <div className="area-style">
+                        <label htmlFor="emailArea" className='label-style'>이메일</label>
+                        <input ref={emailInputRef} type="text" id="emailArea" required size={20} value={email} onChange={(event) => {setEmail(event.target.value)}} onBlur={handleEmail}/>
+                        <span className={`mes-style ${messages.email.color}`}>{messages.email.text}</span>
+                     </div>
+                  </li>
             <li className="birth-section">
-							<div className="area-style">
-								<label htmlFor="birthArea" className='label-style'>생년월일</label>
-								<input ref={birthInputRef} type="text" id="birthArea" required size={8} value={birth} onChange={(event) => {setBirth(event.target.value)}} onBlur={handleBirth}/>
-								<span className={`mes-style ${messages.birth.color}`}>{messages.birth.text}</span>
+                     <div className="area-style">
+                        <label htmlFor="birthArea" className='label-style'>생년월일</label>
+                        <input ref={birthInputRef} type="text" id="birthArea" required size={8} value={birth} onChange={(event) => {setBirth(event.target.value)}} onBlur={handleBirth}/>
+                        <span className={`mes-style ${messages.birth.color}`}>{messages.birth.text}</span>
                 <p className="help-style"><IoCheckmark /> - 를 제외한 8글자 ex) 19900101</p>
-							</div>
-						</li>
+                     </div>
+                  </li>
             <li>
               <br />
               <hr />
