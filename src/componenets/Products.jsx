@@ -2,13 +2,14 @@ import React,{useState, useEffect} from 'react';
 import {useNavigate, Link} from 'react-router-dom'
 import { GiHollowCat } from "react-icons/gi";
 import axios from 'axios';
+import { API_URL } from '../config/constants'; 
 import './products.scss'
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   useEffect(() =>{
-    let url="http://localhost:8080/products";
+    let url=`${API_URL}/products`;
     axios.get(url).then((result)=>{
       const products=result.data.products;
       console.log(products)
@@ -29,7 +30,7 @@ const Products = () => {
               <div className="product-card" key={product.id}>
               <Link to={`products/${product.id}`}>
                 <div className="productImg">
-                  <img src={process.env.PUBLIC_URL + product.imageUrl} alt={product.name} />
+                  <img src={`${API_URL}/${product.imageUrl}`} alt={product.name} />
                 </div>
                 <div className="productCnt">
                   <span className="product-name">{product.name}</span>

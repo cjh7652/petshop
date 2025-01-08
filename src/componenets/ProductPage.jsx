@@ -3,6 +3,7 @@ import {useParams, useNavigate} from 'react-router-dom';
 import './productpage.scss';
 import { GiHollowCat } from "react-icons/gi";
 import axios from 'axios';
+import { API_URL } from '../config/constants'; 
 
 
 
@@ -10,9 +11,9 @@ const ProductPage = () => {
   const {id} = useParams();
   const navigate = useNavigate();
   const [product,setProduct] = useState([]);
- /*  let url="http://localhost:8080/products"; */
+
   useEffect(()=>{
-    axios.get(`http://localhost:8080/products/${id}`)
+    axios.get(`${API_URL}/products/${id}`)
     .then((res)=>{
       //setProduct(res.data.product);
       setProduct(res.data.product);
@@ -27,7 +28,7 @@ const ProductPage = () => {
       <button onClick={() => navigate(-1)} className='back-btn'>이전화면</button>
       <h1>상품 상세 페이지</h1>
       <div className="image-box">
-      <img src={`/${product.imageUrl}`} alt={product.name} />
+      <img src={`${API_URL}/${product.imageUrl}`} alt={product.name} />
       </div>
       <div className="profile-box">
        <GiHollowCat className='icon' />
@@ -39,6 +40,9 @@ const ProductPage = () => {
         <div className="price">{product.price}</div>
         <div className="createAt">2025.01.03</div>
       </div>
+
+      <hr />
+   
     </div>
   );
 };

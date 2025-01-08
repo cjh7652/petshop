@@ -43,15 +43,30 @@ a{text-decoration: none;}
         top: 10px;
         right: 0;
         li{
+          font-size: 12px;
+          color: #000;
+          &:hover{
+           
+            color: #868686;
+          }
+          padding-right: 5px;
           a{
+            font-size: 12px;
+           
+            color: #000;
+            &:hover{
+              color: #868686;
+            }
+          }
+          &:first-child a{
+            margin-right: 10px;
+          }
+          .logout{
             font-size: 12px;
             color: #868686;
             &:hover{
               color: #000;
             }
-          }
-          &:first-child a{
-            margin-right: 10px;
           }
         }
       }

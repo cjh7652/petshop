@@ -11,29 +11,32 @@ const UploadPage = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const navigate=useNavigate();
 
-  const onFinish = (values) => {
-    axios.post(`${API_URL}/products`, {
-        name:values.name,
-        description: values.description,
-        price: values.price,
-        seller: values.seller,
-        imageurl: imageUrl,
-    }).then((result)=>{
-      navigate("/", {replace: true})
-    }).catch((error)=>{
-      console.log(error);
-      message.error('에러가 발생했습니다.')
-    })
+  const onFinish = (val) => {
+     axios.post(`${API_URL}/products`, {
+        name:val.name,
+        description: val.description,
+        price:val.price,
+        seller:val.seller,
+        imageUrl:imageUrl,
+     })
+     .then((result)=>{
+        navigate("/", {replace:true})
+     })
+     .catch((error)=>{
+        console.log(error);
+        message.error(`에러가 발생했습니다.`)
+     })
   };
+
   const onChangeImage = (info) =>{
-    if(info.file.status === "uploading"){
-      return;
-    }
-    if(info.file.status === "done"){
-      const response=info.file.response;
-      const imageUrl=response.imageUrl;
-      setImageUrl(imageUrl)
-    }
+     if(info.file.status === "uploading"){
+        return;
+     }
+     if(info.file.status === "done"){
+        const response=info.file.response;
+        const imageUrl=response.imageUrl;
+        setImageUrl(imageUrl)
+     }
   }
 
   return (
@@ -43,7 +46,7 @@ const UploadPage = () => {
           <Upload name='image'  action={`${API_URL}/image`} listType='picture' showUploadList={false} onChange={onChangeImage}>
               {
                 imageUrl ? (
-                  <div>
+                  <div className="upload-img1">
                     <img src={`${API_URL}/${imageUrl}`} alt="uploadImg" id="upload-img" />
                   </div>
                 ) : (
@@ -73,7 +76,7 @@ const UploadPage = () => {
           <Divider />
           <Form.Item
           label={<span className='upload-label'>상품명</span>}
-          name="seller" 
+          name="name" 
           rules={[
             {
               required: true,
