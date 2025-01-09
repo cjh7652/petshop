@@ -4,7 +4,7 @@ import './productpage.scss';
 import { GiHollowCat } from "react-icons/gi";
 import axios from 'axios';
 import { API_URL } from '../config/constants'; 
-
+import CommentsList from './CommentList';
 
 
 const ProductPage = () => {
@@ -42,7 +42,7 @@ const ProductPage = () => {
       </div>
 
       <hr />
-   
+      <CommentsList />
     </div>
   );
 };
