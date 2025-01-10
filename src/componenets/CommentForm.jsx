@@ -1,16 +1,37 @@
 import React,{useState, useEffect} from 'react';
 import { API_URL } from '../config/constants';
+import {jwtDecode} from 'jwt-decode';
 
-const CommentForm = ({setComments, user_id, post_id}) => {
+const CommentForm = ({setComments, setIsAdding}) => {
    /* const {post_id} = useParams(); */
    const [content, setContent] = useState('');
    const [postId, setPostId] = useState('');
+
+   const [user_id, setUserId] = useState(null);
+   const accessToken= localStorage.getItem('accessToken');
+
+   useEffect(() =>{
+    if(accessToken){
+      try{
+        const decodedToken = jwtDecode(accessToken);
+        console.log('Decoded Token:' , decodedToken);
+        setUserId(decodedToken.id)
+      } catch (error) {
+        console.error('유효하지 않은 토큰입니다', error)
+      }
+    }
+   }, [accessToken])
 
   const hanleSubmit = (e)=>{
     e.preventDefault();
   
     if(!postId){
       alert("게시글 id를 입력해주세요!");
+      return;
+    }
+
+    if(!user_id){
+      alert("로그인 상태가 아닙니다");
       return;
     }
 
@@ -36,7 +57,12 @@ const CommentForm = ({setComments, user_id, post_id}) => {
     })
     .then((data)=>{
       console.log("작성성공", data);
-      setComments((prevComments) => [...prevComments, data.comment]);
+      if(content && postId){
+        setComments((prevComments) => [...prevComments, data.comment]);
+        setContent('');
+        setPostId('');
+      }
+     
     })
     .catch((err)=>{ console.log(err); })
     if(content.trim() === ""){
@@ -52,7 +78,7 @@ const CommentForm = ({setComments, user_id, post_id}) => {
           onChange={(e) => setContent(e.target.value)}
         className='commentText' placeholder='댓글을 작성해주세요'></textarea>
         <button className='commentbtn1' type="submit">댓글 작성</button>
-        <button className='commentInput2' type="button" > 취소</button>
+        <button className='commentInput2' type="button" onClick={() =>setIsAdding(false)} > 취소</button>
       </form>
   );
 };
