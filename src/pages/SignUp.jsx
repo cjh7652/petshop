@@ -17,7 +17,7 @@ const SignUp = () => {
   const birthInputRef= useRef(null)
 
   const [id, setId] = useState('') // 아이디
- /*  const [isIdChecked, setIsIdChecked] = useState(false) */ // 중복확인
+  const [isIdChecked, setIsIdChecked] = useState(false) // 중복확인
   const [pw, setPw] = useState('') //비밀번호
   const [pw2, setPw2] = useState('') //비밀번호 확인
   const [name, setName] = useState('') //이름
@@ -84,7 +84,7 @@ const SignUp = () => {
   const handleId = (event) => {
     const newValue=event.target.value;
     setId(newValue)
-    /* setIsIdChecked(false) *///아이디가 바뀌면 일단 중복확인 초기화
+    setIsIdChecked(false)//아이디가 바뀌면 일단 중복확인 초기화
     if(idRule.test(newValue)){
       handleMessageChange('id','사용 가능한 아이디 입니다', 'success-color');
 
@@ -96,7 +96,7 @@ const SignUp = () => {
     }
   }
   //중복확인
-/*   const handleIdCheck = async () =>{
+  const handleIdCheck = async () =>{
     if(!idRule.test(id)){
       alert('유효한 아이디를 입력하세요');
       return;
@@ -116,7 +116,7 @@ const SignUp = () => {
       console.error(error);
       alert('중복 확인에 실패했습니다. 잠시 후 다시 시도해주세요')
     }
-  } */
+  }
   //패스워드
   const handlePw = (event) => {
     const newPwValue=event.target.value;
@@ -205,10 +205,10 @@ const SignUp = () => {
    }
   const handleSubmit = (event) =>{
     event.preventDefault();
-    /* if(!isIdChecked){
+    if(!isIdChecked){
       alert('아이디 중복확인을 진행해 주세요');
       return;
-    } */
+    }
     if(
       idRule.test(id) &&
       pwRule.test(pw) &&
@@ -261,7 +261,7 @@ const SignUp = () => {
               <div className="area-style">
                 <label htmlFor="idArea" className='label-style'>아이디</label>
                 <input ref={idInputRef} type="text" id="idArea" required size={20} value={id} onChange={(event) => {setId(event.target.value)}} onBlur={handleId} />
-              {/*   <button type="button" onClick={handleIdCheck} className='id-check-button'>중복확인</button> */}
+                <button type="button" onClick={handleIdCheck} className='id-check-button'>중복확인</button>
                 <span className={`mes-style ${messages.id.color}`}>{messages.id.text}</span>
                 <p className="help-style"><IoCheckmark />영문소문자/숫자, 4-16자</p>
               </div>
